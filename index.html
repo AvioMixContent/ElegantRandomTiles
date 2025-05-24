@@ -143,6 +143,7 @@
             padding: 4rem 2rem; /* Smaller padding */
             text-align: center;
             background-color: #6a0dad; /* Base purple background for the section */
+            background-image: linear-gradient(135deg, #6a0dad 0%, #4a148c 100%); /* Base gradient */
             min-height: 400px; /* Ensure enough height for the tiles */
             display: flex; /* Use flexbox to center content */
             align-items: center; /* Center content vertically */
@@ -153,38 +154,38 @@
         .hero-tile {
             position: absolute;
             border-radius: 1.5rem; /* Soft rounded corners for the tiles */
-            opacity: 0.8; /* Slightly transparent to allow overlap blending */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Subtle shadow for depth */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Subtle shadow for depth */
+            opacity: 1; /* Fully opaque for distinct shapes */
         }
 
-        .hero-tile-1 { /* Yellow tile - top left */
-            background-color: #FACC15; /* Tailwind yellow-400 */
-            width: 50%;
-            height: 60%;
-            top: -10%;
-            left: -10%;
-            transform: rotate(-12deg); /* Rotate for irregularity */
-            z-index: 1; /* Lower z-index for background elements */
+        .hero-tile-1 { /* Yellow tile */
+            background-color: #FACC15; /* Yellow */
+            width: 45%; /* Smaller, more distinct */
+            height: 55%;
+            top: 5%; /* Positioned more centrally */
+            left: 5%;
+            transform: rotate(-8deg); /* Slight rotation */
+            z-index: 2; /* Overlaps base, under some others */
         }
 
-        .hero-tile-2 { /* Dark Gray tile - bottom right */
-            background-color: #333333; /* Tailwind gray-800 */
-            width: 60%;
+        .hero-tile-2 { /* Dark Gray tile */
+            background-color: #333333; /* Dark Gray */
+            width: 55%;
+            height: 65%;
+            bottom: 5%; /* Positioned more centrally */
+            right: 5%;
+            transform: rotate(10deg); /* Slight rotation */
+            z-index: 3; /* Overlaps yellow */
+        }
+
+        .hero-tile-3 { /* Purple tile (distinct from base gradient) */
+            background-color: #4a148c; /* A darker purple shade for contrast */
+            width: 40%;
             height: 50%;
-            bottom: -10%;
-            right: -10%;
-            transform: rotate(10deg); /* Rotate for irregularity */
-            z-index: 2; /* Slightly higher z-index for overlap */
-        }
-
-        .hero-tile-3 { /* Purple tile - center */
-            background-color: #6A0DAD; /* Tailwind purple-600 - slightly darker than base for contrast */
-            width: 45%;
-            height: 70%;
-            top: 15%;
-            left: 25%;
-            transform: rotate(-5deg); /* Rotate for irregularity */
-            z-index: 3; /* Highest z-index among tiles */
+            top: 25%;
+            left: 30%;
+            transform: rotate(2deg); /* Slight rotation */
+            z-index: 4; /* Overlaps both yellow and dark gray */
         }
 
         /* Ensure hero content is above the tiles */
