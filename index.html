@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f8f8; /* Very light gray for subtle contrast with white */
+            background-color: #ffffff; /* Pure white background */
             color: #333333;
         }
         /* Basic grid settings for tiles */
@@ -84,33 +84,40 @@
             color: inherit; /* Ensures text inherits color from tile */
         }
 
-        /* New styles for navigation buttons - "Business Hip" colors */
+        /* New styles for navigation buttons */
         .nav-button-style {
-            @apply rounded-3xl shadow-lg transition-all duration-300 ease-in-out;
-            @apply text-white font-bold py-4 px-8 text-2xl; /* Adjusted size */
-            @apply hover:scale-105 hover:shadow-xl;
-            @apply focus:outline-none focus:ring-4 focus:ring-opacity-50;
-            font-weight: 800; /* Extra bold */
-            letter-spacing: 0.08em; /* Slightly wider letter spacing */
-            text-transform: uppercase; /* Uppercase text */
+            @apply rounded-full transition-all duration-300 ease-in-out; /* Modern rounded shape, smooth transition */
+            @apply font-semibold py-3 px-6 text-xl; /* Lighter font, adjusted padding and size */
+            @apply focus:outline-none focus:ring-2 focus:ring-opacity-75; /* Softer focus ring */
+            letter-spacing: 0.05em; /* Slightly less wide letter spacing */
+            text-transform: uppercase; /* Keep uppercase for modern feel */
+            box-shadow: none; /* Ensure no default box-shadow for a flat look */
         }
 
         /* Specific colors and hover effects for each button */
         .btn-purple { @apply bg-purple-600 text-white; }
-        .btn-purple:hover { @apply bg-purple-700; }
-        .btn-purple:focus { @apply ring-purple-500; }
+        .btn-purple:hover {
+            @apply bg-purple-700; /* Darker shade on hover */
+            box-shadow: inset 0 0 5px rgba(106, 13, 173, 0.6); /* Subtle inner purple glow */
+        }
 
         .btn-yellow { @apply bg-yellow-400 text-gray-900; }
-        .btn-yellow:hover { @apply bg-yellow-500; }
-        .btn-yellow:focus { @apply ring-yellow-300; }
+        .btn-yellow:hover {
+            @apply bg-yellow-500; /* Darker shade on hover */
+            box-shadow: inset 0 0 5px rgba(250, 204, 21, 0.8); /* Subtle inner yellow glow */
+        }
 
         .btn-white-purple { @apply bg-white text-purple-600 border border-purple-600; }
-        .btn-white-purple:hover { @apply bg-purple-100; }
-        .btn-white-purple:focus { @apply ring-purple-300; }
+        .btn-white-purple:hover {
+            @apply bg-purple-50 text-purple-700 border-purple-700; /* Light purple background, darker text/border on hover */
+            box-shadow: inset 0 0 5px rgba(106, 13, 173, 0.4); /* Very faint inner purple glow */
+        }
 
         .btn-black-yellow { @apply bg-gray-800 text-yellow-400; }
-        .btn-black-yellow:hover { @apply bg-gray-900; }
-        .btn-black-yellow:focus { @apply ring-yellow-400; }
+        .btn-black-yellow:hover {
+            @apply bg-gray-900; /* Darker shade on hover */
+            box-shadow: inset 0 0 5px rgba(250, 204, 21, 0.6); /* Subtle inner yellow glow */
+        }
 
         /* Enhancements for footer */
         footer {
@@ -128,22 +135,63 @@
         /* Hero section styles */
         .hero-section {
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* Ensures tiles don't spill out */
             border-radius: 2rem; /* Large border-radius for the entire section */
             margin: 2rem auto; /* Centering and spacing */
-            /* max-width: 90%; This was removed to allow container max-width to take effect */
             box-shadow: 0 15px 40px rgba(0,0,0,0.2); /* More prominent shadow */
-            background-image: linear-gradient(135deg, #6a0dad 0%, #4a148c 100%); /* Purple gradient */
             color: #ffffff;
             padding: 4rem 2rem; /* Smaller padding */
             text-align: center;
-            background-size: 200% 200%; /* For gradient animation */
-            animation: gradient-shift 15s ease infinite alternate; /* Gradient animation */
+            background-color: #6a0dad; /* Base purple background for the section */
+            min-height: 400px; /* Ensure enough height for the tiles */
+            display: flex; /* Use flexbox to center content */
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
         }
 
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+        /* Styles for the "glued" tiles within the hero section */
+        .hero-tile {
+            position: absolute;
+            border-radius: 1.5rem; /* Soft rounded corners for the tiles */
+            opacity: 0.8; /* Slightly transparent to allow overlap blending */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Subtle shadow for depth */
+        }
+
+        .hero-tile-1 { /* Yellow tile - top left */
+            background-color: #FACC15; /* Tailwind yellow-400 */
+            width: 50%;
+            height: 60%;
+            top: -10%;
+            left: -10%;
+            transform: rotate(-12deg); /* Rotate for irregularity */
+            z-index: 1; /* Lower z-index for background elements */
+        }
+
+        .hero-tile-2 { /* Dark Gray tile - bottom right */
+            background-color: #333333; /* Tailwind gray-800 */
+            width: 60%;
+            height: 50%;
+            bottom: -10%;
+            right: -10%;
+            transform: rotate(10deg); /* Rotate for irregularity */
+            z-index: 2; /* Slightly higher z-index for overlap */
+        }
+
+        .hero-tile-3 { /* Purple tile - center */
+            background-color: #6A0DAD; /* Tailwind purple-600 - slightly darker than base for contrast */
+            width: 45%;
+            height: 70%;
+            top: 15%;
+            left: 25%;
+            transform: rotate(-5deg); /* Rotate for irregularity */
+            z-index: 3; /* Highest z-index among tiles */
+        }
+
+        /* Ensure hero content is above the tiles */
+        .hero-content {
+            position: relative;
+            z-index: 10; /* Higher z-index than all tiles */
+            max-width: 800px; /* Constrain width for readability */
         }
 
         .hero-title {
@@ -252,6 +300,10 @@
     </nav>
 
     <div class="hero-section container mx-auto max-w-7xl">
+        <div class="hero-tile hero-tile-1"></div>
+        <div class="hero-tile hero-tile-2"></div>
+        <div class="hero-tile hero-tile-3"></div>
+
         <div class="hero-content mx-auto">
             <h2 class="hero-title">
                 Život v dlaždicích
@@ -361,48 +413,48 @@
             },
             {
                 category: 'Web',
-                title: 'Trendy ve webdesignu pro rok 2025',
-                text: 'Co je nového a co očekávat v designu webových stránek.'
+                title: 'Trends in Web Design for 2025',
+                text: 'What\'s new and what to expect in website design.'
             },
             {
                 category: 'Fitness',
-                title: 'Strečink: Proč je důležitý a jak na něj',
-                text: 'Zlepšete flexibilitu a předejděte zraněním.'
+                title: 'Stretching: Why it is important and how to do it',
+                text: 'Improve flexibility and prevent injuries.'
             },
             {
                 category: 'Tierlisty',
-                title: 'Nejlepší aplikace pro produktivitu: Tierlist',
-                text: 'Které nástroje vám skutečně pomohou s efektivitou?'
+                title: 'Best Productivity Apps: Tierlist',
+                text: 'Which tools will really help you with efficiency?'
             },
             {
                 category: 'Technologie',
-                title: 'Blockchain: Více než jen kryptoměny',
-                text: 'Prozkoumejte širší využití technologie blockchain.'
+                title: 'Blockchain: More than just cryptocurrencies',
+                text: 'Explore the wider uses of blockchain technology.'
             },
             {
                 category: 'Web',
-                title: 'Jak vybrat správný hosting pro váš web',
-                text: 'Důležité faktory pro stabilní a rychlé webové stránky.'
+                title: 'How to choose the right hosting for your website',
+                text: 'Important factors for stable and fast websites.'
             },
             {
                 category: 'Fitness',
-                title: 'Intervalový trénink: Spalujte tuk efektivně',
-                text: 'Vysoká intenzita pro maximální výsledky v krátkém čase.'
+                title: 'Interval training: Burn fat effectively',
+                text: 'High intensity for maximum results in a short time.'
             },
             {
                 category: 'Tierlisty',
-                title: 'Nejlepší energetické nápoje: Žebříček chuti a účinku',
-                text: 'Které nápoje vám dodají nejvíce energie bez kompromisů?'
+                title: 'Best Energy Drinks: Taste and Effect Ranking',
+                text: 'Which drinks will give you the most energy without compromise?'
             },
             {
                 category: 'Technologie',
-                title: 'Metaverse: Nová dimenze digitálního světa',
-                text: 'Co je metaverse a jak ovlivní naši budoucnost.'
+                title: 'Metaverse: A new dimension of the digital world',
+                text: 'What is the metaverse and how will it affect our future.'
             },
             {
                 category: 'Web',
-                title: 'Personalizace webu: Klíč k lepšímu uživatelskému zážitku',
-                text: 'Jak přizpůsobit obsah pro každého návštěvníka.'
+                title: 'Website personalization: Key to a better user experience',
+                text: 'How to customize content for each visitor.'
             }
         ];
 
@@ -412,7 +464,7 @@
         let lastColors = [];
         // Keep track of the last 2 colors to avoid immediate repetition
         // With 3 colors, this ensures the new color is different from the previous two.
-        const recentColorHistorySize = 2; 
+        const recentColorHistorySize = 2;
 
         /**
          * Selects a random color from the colors array that is not in the history of recently used colors.
@@ -424,10 +476,10 @@
             // reset to all colors to avoid an infinite loop or error.
             // With 3 colors and history size 2, there will always be at least one option.
             if (availableColors.length === 0) {
-                availableColors = [...colors]; 
+                availableColors = [...colors];
             }
             const newColor = availableColors[Math.floor(Math.random() * availableColors.length)];
-            
+
             // Update history: remove oldest, add new
             lastColors.push(newColor);
             if (lastColors.length > recentColorHistorySize) {
