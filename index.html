@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interní Komunikace - Naše Společnost</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8; /* Very light gray for subtle contrast with white */
+            color: #333333;
+        }
+        /* Basic grid settings for tiles */
+        .grid-container {
+            display: grid;
+            grid-auto-rows: 10px; /* Base row height for tiles */
+            gap: 20px; /* Larger gaps between tiles for a cleaner look */
+            padding: 20px;
+            grid-auto-flow: dense; /* Helps tiles fit better into gaps */
+        }
+
+        /* Responsive column settings for tiles */
+        @media (max-width: 640px) {
+            .grid-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+            .header-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            .header-contact, .header-social {
+                margin-bottom: 8px;
+            }
+            .nav-buttons {
+                flex-direction: column;
+                gap: 12px; /* Larger gaps between navigation buttons on mobile */
+            }
+        }
+        @media (min-width: 641px) and (max-width: 1023px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .header-info {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-buttons {
+                flex-wrap: wrap;
+                gap: 16px; /* Larger gaps between navigation buttons on tablet */
+            }
+            .nav-button {
+                flex-grow: 1;
+            }
+        }
+        @media (min-width: 1024px) {
+            .grid-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .tile-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 20px; /* More padding for text */
+            text-align: center;
+        }
+        .tile-title {
+            font-size: 1.75rem; /* text-3xl */
+            font-weight: 800; /* font-extrabold */
+            margin-bottom: 10px;
+            line-height: 1.2;
+            color: inherit; /* Ensures text inherits color from tile */
+        }
+        .tile-text {
+            font-size: 1.125rem; /* text-lg */
+            line-height: 1.6;
+            opacity: 0.9;
+            color: inherit; /* Ensures text inherits color from tile */
+        }
+
+        /* New styles for navigation buttons - "Business Hip" colors */
+        .nav-button-style {
+            @apply rounded-3xl shadow-lg transition-all duration-300 ease-in-out;
+            @apply text-white font-bold py-4 px-8 text-2xl; /* Adjusted size */
+            @apply hover:scale-105 hover:shadow-xl;
+            @apply focus:outline-none focus:ring-4 focus:ring-opacity-50;
+            font-weight: 800; /* Extra bold */
+            letter-spacing: 0.08em; /* Slightly wider letter spacing */
+            text-transform: uppercase; /* Uppercase text */
+        }
+
+        /* Specific colors and hover effects for each button */
+        .btn-purple { @apply bg-purple-600 text-white; }
+        .btn-purple:hover { @apply bg-purple-700; }
+        .btn-purple:focus { @apply ring-purple-500; }
+
+        .btn-yellow { @apply bg-yellow-400 text-gray-900; }
+        .btn-yellow:hover { @apply bg-yellow-500; }
+        .btn-yellow:focus { @apply ring-yellow-300; }
+
+        .btn-white-purple { @apply bg-white text-purple-600 border border-purple-600; }
+        .btn-white-purple:hover { @apply bg-purple-100; }
+        .btn-white-purple:focus { @apply ring-purple-300; }
+
+        .btn-black-yellow { @apply bg-gray-800 text-yellow-400; }
+        .btn-black-yellow:hover { @apply bg-gray-900; }
+        .btn-black-yellow:focus { @apply ring-yellow-400; }
+
+        /* Enhancements for footer */
+        footer {
+            background-color: #1a1a1a; /* Almost black for footer */
+            color: #ffffff;
+            border-top-left-radius: 2rem; /* Rounded top corners of footer */
+            border-top-right-radius: 2rem;
+            margin-top: 4rem; /* More space above footer */
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+        .footer-link {
+            @apply text-gray-300 hover:text-yellow-400 transition-colors duration-200 font-semibold;
+        }
+
+        /* Hero section styles */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2rem; /* Large border-radius for the entire section */
+            margin: 2rem auto; /* Centering and spacing */
+            max-width: 90%; /* Width limitation */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2); /* More prominent shadow */
+            background-image: linear-gradient(135deg, #6a0dad 0%, #4a148c 100%); /* Purple gradient */
+            color: #ffffff;
+            padding: 4rem 2rem; /* Smaller padding */
+            text-align: center;
+            background-size: 200% 200%; /* For gradient animation */
+            animation: gradient-shift 15s ease infinite alternate; /* Gradient animation */
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .hero-title {
+            font-size: 3.5rem; /* Smaller heading */
+            font-weight: 900; /* font-black */
+            line-height: 1.1; /* More compact line height */
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3); /* More prominent shadow */
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.625rem; /* Smaller subtitle */
+            line-height: 1.5;
+            max-width: 900px;
+            margin: 0 auto 2.5rem auto;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .hero-button {
+            @apply bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-10 rounded-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-70;
+            font-size: 1.5rem; /* Smaller text */
+            text-transform: uppercase; /* Uppercase text */
+            letter-spacing: 0.1em;
+            font-weight: 900;
+        }
+
+        /* Logo specific styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between logo and text */
+            margin-right: auto; /* Pushes logo and text to the left */
+        }
+        .logo-img {
+            height: 40px; /* Adjust height as needed */
+            width: auto;
+            max-width: 120px; /* Ensure logo doesn't get too wide on small screens */
+        }
+        /* Adjust nav buttons for smaller screens when logo is present */
+        @media (max-width: 640px) {
+            .nav-buttons {
+                justify-content: center; /* Center buttons below logo on small screens */
+                width: 100%;
+            }
+            .logo-container {
+                margin-right: 0; /* Remove auto margin on small screens */
+                margin-bottom: 1rem; /* Add space below logo on small screens */
+                justify-content: center; /* Center logo on small screens */
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div class="bg-black text-white py-3 px-6 flex flex-col sm:flex-row justify-between items-center text-sm shadow-md">
+        <div class="header-info flex flex-col sm:flex-row sm:space-x-6 mb-2 sm:mb-0">
+            <span class="header-contact flex items-center mb-1 sm:mb-0">
+                <i class="fas fa-envelope mr-2 text-yellow-400"></i> info@nasafirma.cz
+            </span>
+            <span class="header-contact flex items-center">
+                <i class="fas fa-phone mr-2 text-yellow-400"></i> +420 777 888 999
+            </span>
+        </div>
+        <div class="header-social flex space-x-5">
+            <a href="https://facebook.com" target="_blank" class="text-white hover:text-yellow-400 transition-colors duration-200">
+                <i class="fab fa-facebook-f text-lg"></i>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="text-white hover:text-yellow-400 transition-colors duration-200">
+                <i class="fab fa-linkedin-in text-lg"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" class="text-white hover:text-yellow-400 transition-colors duration-200">
+                <i class="fab fa-instagram text-lg"></i>
+            </a>
+        </div>
+    </div>
+
+    <nav class="bg-white py-6 shadow-lg">
+        <div class="container mx-auto max-w-7xl px-4 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 nav-buttons">
+            <div class="logo-container">
+                <img src="https://placehold.co/120x40/6a0dad/facc15?text=FIT+TIER+TECH+WEB" alt="Fitness Tierlist Technology Web Logo" class="logo-img">
+            </div>
+
+            <a href="#" class="nav-button-style btn-yellow text-center w-full sm:w-auto">
+                Fitness
+            </a>
+            <a href="#" class="nav-button-style btn-purple text-center w-full sm:w-auto">
+                Tierlisty
+            </a>
+            <a href="#" class="nav-button-style btn-white-purple text-center w-full sm:w-auto">
+                Technologie
+            </a>
+            <a href="#" class="nav-button-style btn-yellow text-center w-full sm:w-auto">
+                Web
+            </a>
+            <a href="#" class="nav-button-style btn-black-yellow text-center w-full sm:w-auto">
+                Kontakty
+            </a>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content mx-auto">
+            <h2 class="hero-title">
+                Vítejte ve světě Fitness, Tierlistů, Technologie a Webu!
+            </h2>
+            <p class="hero-subtitle">
+                Prozkoumejte nejnovější trendy ve fitness, objevte nejlepší žebříčky, ponořte se do světa technologií a prozkoumejte inovace ve webu.
+            </p>
+            <button class="hero-button">
+                Prozkoumat
+            </button>
+        </div>
+    </div>
+
+    <div class="container mx-auto max-w-7xl py-12">
+        <h1 class="text-5xl font-extrabold text-center mb-10 text-purple-700">Nejnovější články a žebříčky</h1>
+        <div id="tiles-container" class="grid-container">
+            </div>
+    </div>
+
+    <footer class="py-10 px-6 text-center">
+        <div class="container mx-auto max-w-7xl">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-2xl font-bold text-white mb-2">Naše Společnost</h3>
+                    <p class="text-gray-400 text-sm">&copy; 2025 Všechna práva vyhrazena.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="footer-link">O Nás</a>
+                    <a href="#" class="footer-link">Kariéra</a>
+                    <a href="#" class="footer-link">Zásady ochrany osobních údajů</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-6 text-gray-500 text-sm">
+                Navrženo pro efektivní interní komunikaci.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Color, size, and content definitions are at the beginning of the script.
+        const colors = [
+            'bg-yellow-400', // Neon Yellow
+            'bg-purple-600', // Bright Purple
+            'bg-gray-800'    // Dark contrast
+        ];
+
+        const tileSizes = [
+            { cols: 1, rows: 15 }, // Standard vertical rectangle
+            { cols: 1, rows: 20 }, // Taller vertical rectangle
+            { cols: 2, rows: 15 }, // Wide rectangle (takes 2 columns)
+            { cols: 2, rows: 10 }  // Low wide rectangle (for quick messages)
+        ];
+
+        // Content for tiles adapted to internal communication
+        const tileContents = [
+            {
+                category: 'Fitness',
+                title: '5 nejlepších cviků pro začátečníky',
+                text: 'Začněte svou fitness cestu s těmito základními, ale účinnými cviky.'
+            },
+            {
+                category: 'Tierlisty',
+                title: 'Nejlepší proteinové tyčinky: Tierlist',
+                text: 'Objektivní hodnocení proteinových tyčinek na trhu.'
+            },
+            {
+                category: 'Technologie',
+                title: 'Budoucnost AI v každodenním životě',
+                text: 'Jak umělá inteligence mění naše domovy a práci.'
+            },
+            {
+                category: 'Web',
+                title: 'Úvod do responzivního designu',
+                text: 'Základy tvorby webů, které vypadají skvěle na každém zařízení.'
+            },
+            {
+                category: 'Fitness',
+                title: 'Zdravá snídaně pro energii na celý den',
+                text: 'Recepty a tipy na snídaně, které vás nastartují.'
+            },
+            {
+                category: 'Tierlisty',
+                title: 'Nejlepší sci-fi filmy všech dob: Naše hodnocení',
+                text: 'Žebříček filmů, které definovaly žánr sci-fi.'
+            },
+            {
+                category: 'Technologie',
+                title: 'Recenze nejnovějších chytrých hodinek',
+                text: 'Podrobný pohled na funkce a výkon nejnovějších modelů.'
+            },
+            {
+                category: 'Web',
+                title: 'SEO základy: Jak zlepšit viditelnost vašeho webu',
+                text: 'Klíčové principy optimalizace pro vyhledávače.'
+            },
+            {
+                category: 'Fitness',
+                title: 'Jak si udržet motivaci k cvičení',
+                text: 'Praktické tipy pro dlouhodobou konzistenci.'
+            },
+            {
+                category: 'Tierlisty',
+                title: 'Nejlepší videohry roku 2024: Kompletní žebříček',
+                text: 'Které tituly se letos umístily na špici herního světa?'
+            },
+            {
+                category: 'Technologie',
+                title: 'Kybernetická bezpečnost pro každého',
+                text: 'Základní kroky k ochraně vašich dat online.'
+            },
+            {
+                category: 'Web',
+                title: 'Trendy ve webdesignu pro rok 2025',
+                text: 'Co je nového a co očekávat v designu webových stránek.'
+            },
+            {
+                category: 'Fitness',
+                title: 'Strečink: Proč je důležitý a jak na něj',
+                text: 'Zlepšete flexibilitu a předejděte zraněním.'
+            },
+            {
+                category: 'Tierlisty',
+                title: 'Nejlepší aplikace pro produktivitu: Tierlist',
+                text: 'Které nástroje vám skutečně pomohou s efektivitou?'
+            },
+            {
+                category: 'Technologie',
+                title: 'Blockchain: Více než jen kryptoměny',
+                text: 'Prozkoumejte širší využití technologie blockchain.'
+            },
+            {
+                category: 'Web',
+                title: 'Jak vybrat správný hosting pro váš web',
+                text: 'Důležité faktory pro stabilní a rychlé webové stránky.'
+            },
+            {
+                category: 'Fitness',
+                title: 'Intervalový trénink: Spalujte tuk efektivně',
+                text: 'Vysoká intenzita pro maximální výsledky v krátkém čase.'
+            },
+            {
+                category: 'Tierlisty',
+                title: 'Nejlepší energetické nápoje: Žebříček chuti a účinku',
+                text: 'Které nápoje vám dodají nejvíce energie bez kompromisů?'
+            },
+            {
+                category: 'Technologie',
+                title: 'Metaverse: Nová dimenze digitálního světa',
+                text: 'Co je metaverse a jak ovlivní naši budoucnost.'
+            },
+            {
+                category: 'Web',
+                title: 'Personalizace webu: Klíč k lepšímu uživatelskému zážitku',
+                text: 'Jak přizpůsobit obsah pro každého návštěvníka.'
+            }
+        ];
+
+        // Array to store recently generated colors
+        let lastColors = [];
+        const recentColorHistorySize = colors.length - 1; 
+
+        // Array to store recently generated sizes
+        let lastSizes = [];
+        const recentSizeHistorySize = tileSizes.length - 1;
+
+        /**
+         * Selects a random color from the colors array that is not in the history of recently used colors.
+         * @returns {string} Tailwind CSS class name for background color.
+         */
+        function getRandomColor() {
+            let availableColors = colors.filter(color => !lastColors.includes(color));
+            if (availableColors.length === 0) {
+                availableColors = [...colors]; // Reset if all colors were recently used
+            }
+            const newColor = availableColors[Math.floor(Math.random() * availableColors.length)];
+            
+            lastColors.push(newColor);
+            if (lastColors.length > recentColorHistorySize) {
+                lastColors.shift();
+            }
+            return newColor;
+        }
+
+        /**
+         * Selects a random tile size (column and row span) that is not in the history of recently used sizes.
+         * @returns {object} Object with `cols` and `rows` properties.
+         */
+        function getRandomSize() {
+            let availableSizes = tileSizes.filter(size => 
+                !lastSizes.some(ls => ls.cols === size.cols && ls.rows === size.rows)
+            );
+            if (availableSizes.length === 0) {
+                availableSizes = [...tileSizes]; // Reset if all sizes were recently used
+            }
+            const newSize = availableSizes[Math.floor(Math.random() * availableSizes.length)];
+
+            lastSizes.push(newSize);
+            if (lastSizes.length > recentSizeHistorySize) {
+                lastSizes.shift();
+            }
+            return newSize;
+        }
+
+        /**
+         * Selects random content for a tile.
+         * @returns {object} Object with category, title, and text.
+         */
+        function getRandomContent() {
+            const randomIndex = Math.floor(Math.random() * tileContents.length);
+            return tileContents[randomIndex];
+        }
+
+        const tilesContainer = document.getElementById('tiles-container');
+
+        /**
+         * Generates and adds tiles to the container.
+         * @param {number} numTiles Number of tiles to generate.
+         */
+        function generateTiles(numTiles) {
+            tilesContainer.innerHTML = '';
+            lastColors = []; // Reset color history
+            lastSizes = []; // Reset size history
+
+            for (let i = 0; i < numTiles; i++) {
+                const tile = document.createElement('div');
+                const size = getRandomSize();
+                const content = getRandomContent();
+                const tileColor = getRandomColor();
+
+                tile.classList.add(
+                    'rounded-xl',
+                    'shadow-md',
+                    'flex',
+                    'flex-col',
+                    'items-center',
+                    'justify-center',
+                    'transition-all',
+                    'duration-300',
+                    'ease-in-out',
+                    'hover:scale-103', /* Slightly milder zoom effect */
+                    'hover:shadow-lg',
+                    tileColor
+                );
+
+                // Sets text color based on tile background color
+                if (tileColor.includes('bg-yellow')) {
+                    tile.classList.add('text-gray-900'); // Dark text for light background
+                } else {
+                    tile.classList.add('text-white'); // Light text for dark background
+                }
+
+                tile.style.gridColumnEnd = `span ${size.cols}`;
+                tile.style.gridRowEnd = `span ${size.rows}`;
+
+                tile.innerHTML = `
+                    <div class="tile-content">
+                        <h3 class="tile-title">${content.title}</h3>
+                        <p class="tile-text">${content.text}</p>
+                    </div>
+                `;
+                tilesContainer.appendChild(tile);
+            }
+        }
+
+        // Page initialization after DOM load
+        window.onload = () => {
+            generateTiles(70); // Generates 70 tiles when the page loads
+        };
+    </script>
+</body>
+</html>
