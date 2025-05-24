@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interní Komunikace - Naše Společnost</title>
+    <title>Life In Tiles</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -225,7 +225,12 @@
     <nav class="bg-white py-6 shadow-lg">
         <div class="container mx-auto max-w-7xl px-4 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 nav-buttons">
             <div class="logo-container">
-                <img src="https://placehold.co/120x40/6a0dad/facc15?text=FIT+TIER+TECH+WEB" alt="Fitness Tierlist Technology Web Logo" class="logo-img">
+                <svg class="h-10 w-auto" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="30" height="30" rx="6" fill="#FACC15"/>
+                    <rect x="15" y="10" width="30" height="30" rx="6" fill="#6A0DAD"/>
+                    <rect x="30" y="20" width="30" height="20" rx="6" fill="#333333"/>
+                </svg>
+                <span class="text-gray-900 text-2xl font-extrabold leading-none">Life In Tiles</span>
             </div>
 
             <a href="#" class="nav-button-style btn-yellow text-center w-full sm:w-auto">
@@ -249,15 +254,12 @@
     <div class="hero-section">
         <div class="hero-content mx-auto">
             <h2 class="hero-title">
-                Vítejte ve světě Fitness, Tierlistů, Technologie a Webu!
+                Život v dlaždicích
             </h2>
             <p class="hero-subtitle">
-                Prozkoumejte nejnovější trendy ve fitness, objevte nejlepší žebříčky, ponořte se do světa technologií a prozkoumejte inovace ve webu.
+                Prozkoumejte svět kolem sebe, jednu dlaždici po druhé.
             </p>
-            <button class="hero-button">
-                Prozkoumat
-            </button>
-        </div>
+            </div>
     </div>
 
     <div class="container mx-auto max-w-7xl py-12">
@@ -404,13 +406,13 @@
             }
         ];
 
+        const tilesContainer = document.getElementById('tiles-container');
+
         // Array to store recently generated colors
         let lastColors = [];
-        const recentColorHistorySize = colors.length - 1; 
-
-        // Array to store recently generated sizes
-        let lastSizes = [];
-        const recentSizeHistorySize = tileSizes.length - 1;
+        // Keep track of the last 2 colors to avoid immediate repetition
+        // With 3 colors, this ensures the new color is different from the previous two.
+        const recentColorHistorySize = 2; 
 
         /**
          * Selects a random color from the colors array that is not in the history of recently used colors.
@@ -418,24 +420,32 @@
          */
         function getRandomColor() {
             let availableColors = colors.filter(color => !lastColors.includes(color));
+            // If filtering leaves no options (e.g., only two colors and the last two were those),
+            // reset to all colors to avoid an infinite loop or error.
+            // With 3 colors and history size 2, there will always be at least one option.
             if (availableColors.length === 0) {
-                availableColors = [...colors]; // Reset if all colors were recently used
+                availableColors = [...colors]; 
             }
             const newColor = availableColors[Math.floor(Math.random() * availableColors.length)];
             
+            // Update history: remove oldest, add new
             lastColors.push(newColor);
             if (lastColors.length > recentColorHistorySize) {
-                lastColors.shift();
+                lastColors.shift(); // Remove the oldest color
             }
             return newColor;
         }
+
+        // Array to store recently generated sizes (unchanged from previous version)
+        let lastSizes = [];
+        const recentSizeHistorySize = tileSizes.length - 1;
 
         /**
          * Selects a random tile size (column and row span) that is not in the history of recently used sizes.
          * @returns {object} Object with `cols` and `rows` properties.
          */
         function getRandomSize() {
-            let availableSizes = tileSizes.filter(size => 
+            let availableSizes = tileSizes.filter(size =>
                 !lastSizes.some(ls => ls.cols === size.cols && ls.rows === size.rows)
             );
             if (availableSizes.length === 0) {
@@ -459,22 +469,20 @@
             return tileContents[randomIndex];
         }
 
-        const tilesContainer = document.getElementById('tiles-container');
-
         /**
          * Generates and adds tiles to the container.
          * @param {number} numTiles Number of tiles to generate.
          */
         function generateTiles(numTiles) {
             tilesContainer.innerHTML = '';
-            lastColors = []; // Reset color history
-            lastSizes = []; // Reset size history
+            lastColors = []; // Reset color history for new generation
+            lastSizes = []; // Reset size history for new generation
 
             for (let i = 0; i < numTiles; i++) {
                 const tile = document.createElement('div');
                 const size = getRandomSize();
                 const content = getRandomContent();
-                const tileColor = getRandomColor();
+                const tileColor = getRandomColor(); // Call the updated getRandomColor
 
                 tile.classList.add(
                     'rounded-xl',
